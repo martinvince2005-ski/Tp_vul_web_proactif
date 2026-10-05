@@ -19,7 +19,7 @@ jobs:
  
     steps:
       - name: Récupération du code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
  
       - name: Initialisation de CodeQL
         uses: github/codeql-action/init@v4

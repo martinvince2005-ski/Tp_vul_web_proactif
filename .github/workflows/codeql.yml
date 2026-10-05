@@ -1,0 +1,32 @@
+name: CodeQL - Analyse SAST
+ 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+ 
+permissions:
+  contents: read
+  security-events: write
+ 
+jobs:
+  analyze:
+    name: Analyse CodeQL
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v6
+ 
+      - name: Initialisation de CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: python
+ 
+      - name: Analyse CodeQL
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:python"

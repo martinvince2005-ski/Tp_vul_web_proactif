@@ -1,0 +1,24 @@
+name: CI - Test du pipeline
+ 
+on:
+  push:
+    branches:
+      - main
+ 
+jobs:
+  test:
+    name: Vérification du projet
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v6
+ 
+      - name: Vérification de Python
+        run: python3 --version
+ 
+      - name: Vérification des fichiers Flask
+        run: |
+          test -f app1.py
+          test -f app2.py
+          echo "Les deux applications Flask sont présentes."

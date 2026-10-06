@@ -1,0 +1,54 @@
+name: Trivy - Scan des images Docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  trivy:
+    name: Build et scan des images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v6
+
+      - name: Construction de l'image app1
+        run: |
+          docker build \
+            --build-arg APP=app1 \
+            -t tp-vul-web-app1:${{ github.sha }} .
+
+      - name: Construction de l'image app2
+        run: |
+          docker build \
+            --build-arg APP=app2 \
+            -t tp-vul-web-app2:${{ github.sha }} .
+
+      - name: Scan Trivy - app1
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: 'tp-vul-web-app1:${{ github.sha }}'
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          vuln-type: 'os,library'
+          ignore-unfixed: true
+          exit-code: '1'
+
+      - name: Scan Trivy - app2
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: 'tp-vul-web-app2:${{ github.sha }}'
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          vuln-type: 'os,library'
+          ignore-unfixed: true
+          exit-code: '1'

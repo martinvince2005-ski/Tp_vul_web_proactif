@@ -21,8 +21,8 @@ def ping():
     host = request.args.get('host', '127.0.0.1')
 
     result = subprocess.run(
-        f"ping -c 1 {host}",
-        shell=True,
+        ["ping", "-c", "1", host],
+        shell=False,
         capture_output=True,
         text=True
     )
